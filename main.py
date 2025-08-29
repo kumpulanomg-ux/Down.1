@@ -11,7 +11,7 @@ import time
 from datetime import datetime
 import urllib.parse
 
-TOKEN = '7538626835:AAHLxNPMp1LQ3bQoZelgI57V-eRJOpP8SXU'
+TOKEN = '8180963583:AAFCAGjzavGPU-JgUYB3kP72Ce2h4KcoPzA'
 AbuHamza = 6334408675 
 
 DB = 'IMSWAD.db'
@@ -526,14 +526,22 @@ def process_add_channel(message):
         logger.error(f"Error in process_add_channel: {e}")
         bot.reply_to(message, "❌ حدث خطأ أثناء معالجة طلبك.")
 
-def run_bot():
-    while True:
-        try:
-            logger.info("Starting bot...")
-            bot.polling(none_stop=True, interval=2, timeout=30)
-        except Exception as e:
-            logger.error(f"Bot crashed: {e}", exc_info=True)
-            time.sleep(10)
+import threading
+from flask import Flask
+import time
+
+# Flask app
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Bot is running!"
+
+def run_flask():
+    app.run(host="0.0.0.0", port=8080)
 
 if __name__ == '__main__':
-    run_bot()
+    # البوت يشتغل
+    threading.Thread(target=run_bot).start()
+    # الموقع يشتغل
+    threading.Thread(target=run_flask).start()
