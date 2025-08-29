@@ -11,7 +11,7 @@ import time
 from datetime import datetime
 import urllib.parse
 
-TOKEN = '8180963583:AAFCAGjzavGPU-JgUYB3kP72Ce2h4KcoPzA'
+TOKEN = '7538626835:AAHLxNPMp1LQ3bQoZelgI57V-eRJOpP8SXU'
 AbuHamza = 6334408675 
 
 DB = 'IMSWAD.db'
