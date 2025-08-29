@@ -526,27 +526,21 @@ def process_add_channel(message):
         logger.error(f"Error in process_add_channel: {e}")
         bot.reply_to(message, "❌ حدث خطأ أثناء معالجة طلبك.")
 
-import telebot
 import time
 import threading
 from flask import Flask
 
-# =====================
-# هنا انت عامل التعريفات فوق (API_ID, API_HASH, BOT_TOKEN, SESSION)
-# خلاص نستخدمهم على طول
-# =====================
-bot = telebot.TeleBot(BOT_TOKEN, parse_mode="HTML")
+# هنا عندك البوت متعرف فوق بالفعل:
+# bot = Client("mybot", api_id=..., api_hash=..., bot_token=...)
 
-# =====================
-# أوامر البوت
-# =====================
-@bot.message_handler(commands=["start", "help"])
-def send_welcome(message):
-    bot.reply_to(message, "👋 أهلا! البوت شغال تمام ✅")
+# Flask app
+app = Flask(__name__)
 
-# =====================
-# تشغيل البوت + Auto-Restart
-# =====================
+@app.route('/')
+def home():
+    return "Bot is running!"
+
+# تشغيل البوت
 def run_bot():
     while True:
         try:
@@ -556,18 +550,10 @@ def run_bot():
             print(f"Bot crashed: {e}")
             time.sleep(10)
 
-# =====================
-# Flask عشان Render يفضل شايف السيرفر شغال
-# =====================
-app = Flask(__name__)
-
-@app.route('/')
-def home():
-    return "✅ Bot is running!"
-
-# =====================
-# Main
-# =====================
-if __name__ == "__main__":
-    threading.Thread(target=run_bot).start()
+# تشغيل Flask
+def run_flask():
     app.run(host="0.0.0.0", port=8080)
+
+if __name__ == '__main__':
+    threading.Thread(target=run_bot).start()
+    threading.Thread(target=run_flask).start()
