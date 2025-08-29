@@ -526,9 +526,12 @@ def process_add_channel(message):
         logger.error(f"Error in process_add_channel: {e}")
         bot.reply_to(message, "❌ حدث خطأ أثناء معالجة طلبك.")
 
+import time
 import threading
 from flask import Flask
-import time
+
+# هنا عندك البوت متعرف فوق بالفعل:
+# bot = Client("mybot", api_id=..., api_hash=..., bot_token=...)
 
 # Flask app
 app = Flask(__name__)
@@ -537,11 +540,19 @@ app = Flask(__name__)
 def home():
     return "Bot is running!"
 
+# تشغيل البوت
+def run_bot():
+    while True:
+        try:
+            bot.run()   # نفس البوت اللي معرف فوق
+        except Exception as e:
+            print(f"Bot crashed: {e}")
+            time.sleep(10)
+
+# تشغيل Flask
 def run_flask():
     app.run(host="0.0.0.0", port=8080)
 
 if __name__ == '__main__':
-    # البوت يشتغل
     threading.Thread(target=run_bot).start()
-    # الموقع يشتغل
     threading.Thread(target=run_flask).start()
